@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360° Feedback – Pengelolaan Kinerja</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg1: #ffffff; --bg2: #f5f5f5; --bg3: #efefef;
+    --tx1: #1a1a1a; --tx2: #5a5a5a; --tx3: #7a7a7a;
+    --bd3: #eaeaea; --bd2: #d0d0d0;
+    --r: 6px; --rl: 8px;
+    --accent: #0858e8; --accent-hover: #0840c0; --primary: #1a1a1a; --brand-navy: #104078;
+  }
+  body { font-family: -apple-system,'Segoe UI',sans-serif; background:var(--bg3); color:var(--tx1); font-size:14px; line-height:1.6; }
+  .topbar { display:flex; align-items:center; padding:12px 24px; border-bottom:0.5px solid var(--bd3); background:var(--bg1); height:57px; }
+  .logo-box { width:32px; height:32px; border-radius:50%; background:var(--brand-navy); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .logo-box i { color:#fff; font-size:16px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand-text { font-size:14px; font-weight:700; color:var(--brand-navy); line-height:1.25; }
+
+  .hero { max-width:760px; margin:0 auto; padding:72px 24px 24px; text-align:center; }
+  .hero-eyebrow { font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+  .hero-title { font-size:28px; font-weight:700; color:var(--tx1); margin-bottom:10px; }
+  .hero-sub { font-size:14px; color:var(--tx2); max-width:540px; margin:0 auto; }
+
+  .choices { max-width:760px; margin:36px auto 0; padding:0 24px 72px; display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:640px) { .choices { grid-template-columns:1fr; } }
+  .choice-card { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); padding:28px 24px; text-align:left; text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:14px; transition:border-color .12s, box-shadow .12s; }
+  .choice-card:hover { border-color:var(--accent); box-shadow:0 2px 10px rgba(8,88,232,0.08); }
+  .choice-icon { width:44px; height:44px; border-radius:10px; background:#eaf1fd; display:flex; align-items:center; justify-content:center; }
+  .choice-icon i { font-size:22px; color:var(--accent); }
+  .choice-title { font-size:16px; font-weight:700; color:var(--tx1); }
+  .choice-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
+  .choice-cta { margin-top:auto; display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--accent); }
+  .choice-cta i { font-size:16px; transition:transform .12s; }
+  .choice-card:hover .choice-cta i { transform:translateX(3px); }
+
+  .footnote { max-width:760px; margin:0 auto 60px; padding:0 24px; text-align:center; font-size:12px; color:var(--tx3); }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div>
+      <div class="brand-text">Pengelolaan<br>Kinerja</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Prototype · 360° Feedback</div>
+    <div class="hero-title">Penilaian Perilaku Kerja 360°</div>
+    <div class="hero-sub">Pilih peran untuk mencoba alur penilaian sesuai POV masing-masing.</div>
+  </div>
+
+  <div class="choices">
+    <a class="choice-card" href="360_pov_guru_menilai.html">
+      <div class="choice-icon"><i class="ti ti-user"></i></div>
+      <div>
+        <div class="choice-title">Guru</div>
+        <div class="choice-desc">Menilai rekan sejawat Guru dan atasan (Kepala Sekolah).</div>
+      </div>
+      <div class="choice-cta">Buka prototype <i class="ti ti-arrow-right"></i></div>
+    </a>
+
+    <a class="choice-card" href="360_pov_ks_menilai.html">
+      <div class="choice-icon"><i class="ti ti-users"></i></div>
+      <div>
+        <div class="choice-title">Kepala Sekolah</div>
+        <div class="choice-desc">Menilai rekan sejawat Kepala Sekolah lain.</div>
+      </div>
+      <div class="choice-cta">Buka prototype <i class="ti ti-arrow-right"></i></div>
+    </a>
+  </div>
+
+  <div class="footnote">Placeholder copy &amp; visual — akan di-polish bareng tim.</div>
+
+</body>
+</html>
