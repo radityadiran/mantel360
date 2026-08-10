@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360° Feedback – POV Guru (Menilai Rekan Sejawat & Pejabat Penilai Kinerja)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg1: #ffffff; --bg2: #f5f5f5; --bg3: #efefef;
+    --tx1: #1a1a1a; --tx2: #5a5a5a; --tx3: #7a7a7a;
+    --bd3: #eaeaea; --bd2: #d0d0d0;
+    --r: 6px; --rl: 8px;
+    --accent: #0858e8; --accent-hover: #0840c0; --primary: #1a1a1a; --brand-navy: #104078;
+  }
+  body { font-family: -apple-system,'Segoe UI',sans-serif; background:var(--bg3); color:var(--tx1); font-size:14px; line-height:1.6; }
+  .page { display:none; } .page.active { display:block; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 24px; border-bottom:0.5px solid var(--bd3); background:var(--bg1); position:sticky; top:0; z-index:100; height:57px; }
+  .logo-box { width:32px; height:32px; border-radius:50%; background:var(--brand-navy); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .logo-box i { color:#fff; font-size:16px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand-text { font-size:14px; font-weight:700; color:var(--brand-navy); line-height:1.25; }
+  .period-badge { font-size:12px; padding:5px 12px; border:none; border-radius:999px; background:#ede9fe; color:#1a1a19; display:flex; align-items:center; gap:6px; margin-left:6px; }
+  .topbar-right { display:flex; align-items:center; gap:12px; }
+  .topbar-user { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--tx1); font-weight:500; }
+  .layout { display:flex; min-height:calc(100vh - 57px); }
+  .sidebar { width:220px; flex-shrink:0; border-right:0.5px solid var(--bd3); padding:16px 0; background:var(--bg1); position:sticky; top:57px; height:calc(100vh - 57px); overflow-y:auto; }
+  .sb-item { display:flex; align-items:center; gap:10px; padding:9px 20px; font-size:13px; color:var(--tx2); cursor:pointer; transition:background .12s; }
+  .sb-item:hover { background:var(--bg2); }
+  .sb-item.active { color:var(--tx1); font-weight:600; background:none; }
+  .sb-item i { font-size:18px; }
+  .sb-chevron { margin-left:auto; font-size:14px !important; transition:transform .15s; }
+  .sb-chevron.open { transform:rotate(180deg); }
+  .sb-sub { display:none; }
+  .sb-sub.open { display:block; }
+  .sb-subitem { padding-left:48px; font-size:13px; }
+  .main { flex:1; padding:28px 32px; background:var(--bg3); min-width:0; }
+  .card { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:var(--r); font-size:13px; font-weight:500; cursor:pointer; border:0.5px solid var(--bd2); background:var(--bg1); color:var(--tx1); transition:background .12s; font-family:inherit; }
+  .btn:hover { background:var(--bg2); }
+  .btn-primary { background:var(--primary); color:#fff; border-color:var(--primary); }
+  .btn-primary:hover { background:#000; }
+  .btn-primary:disabled { background:#e0e0e0; color:#a0a0a0; border-color:#e0e0e0; cursor:not-allowed; }
+  .btn-primary-blue { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-primary-blue:hover { background:var(--accent-hover); }
+  .btn-primary-blue:disabled { background:#e0e0e0; color:#a0a0a0; border-color:#e0e0e0; cursor:not-allowed; }
+  .btn-sm { padding:6px 12px; font-size:12px; }
+  .btn-lg { padding:13px 32px; font-size:15px; font-weight:600; justify-content:center; }
+  .badge { display:inline-flex; align-items:center; font-size:11px; padding:3px 10px; border-radius:999px; font-weight:500; white-space:nowrap; }
+  .bdg-done    { background:#eaf3de; color:#3b6d11; }
+  .bdg-pending { background:#faeeda; color:#854f0b; }
+  .card-360-entry { background:var(--bg1); border:0.5px solid #c3d9f8; border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .card-360-entry .btn { flex-shrink:0; }
+  .info-card { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; gap:16px; }
+  .info-card-icon { width:40px; height:40px; border-radius:50%; background:#fdf1da; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .info-card-icon i { font-size:20px; color:#d87800; }
+  .info-card-body { flex:1; min-width:0; }
+  .info-card-title { font-size:15px; font-weight:600; margin-bottom:4px; }
+  .info-card-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
+  .info-card .btn { flex-shrink:0; }
+  .c360-left { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
+  .c360-left > div:last-child { min-width:0; flex:1; }
+  .c360-icon { width:44px; height:44px; border-radius:var(--r); background:#dcebff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .c360-icon i { font-size:22px; color:var(--accent); }
+  .progress-ring { width:60px; height:60px; border-radius:50%; background:conic-gradient(#eaeaea 0deg, #eaeaea 0deg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .progress-ring-inner { width:46px; height:46px; border-radius:50%; background:var(--bg1); display:flex; align-items:center; justify-content:center; }
+  .progress-ring-inner span { font-size:14px; font-weight:700; color:var(--tx1); }
+  .pk-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+  .pk-title { font-size:16px; font-weight:600; margin-bottom:4px; }
+  .pk-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
+  .list-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:0.5px solid var(--bd3); }
+  .list-row:last-child { border-bottom:none; padding-bottom:0; }
+  .list-row-left { display:flex; align-items:center; gap:14px; min-width:0; }
+  .list-row-icon { width:40px; height:40px; border-radius:var(--r); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
+  .list-row-title { font-size:14px; font-weight:500; margin-bottom:4px; }
+  .c360-title { font-size:15px; font-weight:500; margin-bottom:2px; }
+  .c360-sub { font-size:13px; color:var(--tx2); }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--tx2); cursor:pointer; margin-bottom:20px; padding:0; background:none; border:none; font-family:inherit; }
+  .back-btn:hover { color:var(--tx1); }
+  .page-title { font-size:22px; font-weight:600; }
+  .page-sub { font-size:13px; color:var(--tx2); margin:6px 0 24px; }
+  .notice-box { background:#eaf4ff; border-radius:var(--r); padding:14px 16px; display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--tx1); margin-bottom:16px; }
+  .notice-box i { color:var(--accent); font-size:16px; margin-top:1px; flex-shrink:0; }
+  .filter-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-pill { font-size:13px; font-weight:500; padding:7px 16px; border-radius:999px; border:0.5px solid var(--bd2); color:var(--tx1); background:var(--bg1); cursor:pointer; }
+  .filter-pill.active { border-color:var(--accent); background:#eaf4ff; color:var(--accent); }
+  .tbl-wrap { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); overflow:hidden; }
+  table.assess-table { width:100%; border-collapse:collapse; }
+  table.assess-table th { font-size:11px; font-weight:600; color:var(--tx2); text-transform:uppercase; letter-spacing:.05em; padding:12px 20px; text-align:left; background:var(--bg2); border-bottom:0.5px solid var(--bd3); }
+  table.assess-table td { padding:13px 20px; border-bottom:0.5px solid var(--bd3); vertical-align:middle; font-size:13px; }
+  table.assess-table tr:last-child td { border-bottom:none; }
+  table.assess-table tr:hover td { background:#f9f8f6; }
+  .person-cell { display:flex; align-items:center; gap:12px; }
+  .person-av { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0; }
+  .av-ks   { background:#dcebff; color:var(--accent); }
+  .av-guru { background:#eaf3de; color:#3b6d11; }
+  .person-name { font-size:13px; font-weight:500; }
+  .role-tag { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:500; padding:3px 10px; border-radius:999px; white-space:nowrap; }
+  .rt-ks   { background:#dcebff; color:var(--accent); }
+  .rt-guru { background:#eaf3de; color:#3b6d11; }
+  .hub-tag { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--tx2); }
+  .subject-header { background:var(--bg2); border-radius:var(--r); padding:12px 16px; margin-bottom:20px; display:flex; align-items:center; gap:14px; }
+  .subject-av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; }
+  .subject-name { font-size:14px; font-weight:500; }
+  .subject-meta { font-size:12px; color:var(--tx2); display:flex; align-items:center; gap:8px; margin-top:2px; }
+  .form-wrap { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); overflow:hidden; }
+  table.peri-table { width:100%; border-collapse:collapse; }
+  table.peri-table th { font-size:12px; font-weight:600; color:var(--tx2); text-align:left; padding:12px 14px; border-bottom:0.5px solid var(--bd3); background:var(--bg2); }
+  table.peri-table td { padding:16px 14px; vertical-align:top; border-bottom:0.5px solid var(--bd3); font-size:13px; }
+  table.peri-table tr:last-child td { border-bottom:none; }
+  .likert-group { display:flex; flex-direction:column; gap:6px; }
+  .likert-opt { display:flex; align-items:center; gap:8px; padding:7px 10px; border:0.5px solid var(--bd3); border-radius:var(--r); cursor:pointer; transition:background .12s,border-color .12s; font-size:12px; color:var(--tx2); user-select:none; }
+  .likert-opt:hover { background:var(--bg2); }
+  .likert-opt input[type=radio] { accent-color:var(--accent); flex-shrink:0; }
+  .likert-opt.sel-sangat-baik  { background:#eaf3de; border-color:#c0dd97; color:#3b6d11; font-weight:500; }
+  .likert-opt.sel-baik         { background:#f0f7e6; border-color:#c0dd97; color:#527a1e; font-weight:500; }
+  .likert-opt.sel-butuh        { background:#faeeda; border-color:#fac775; color:#854f0b; font-weight:500; }
+  .likert-opt.sel-kurang       { background:#fdf0eb; border-color:#f0997b; color:#993c1d; font-weight:500; }
+  .likert-opt.sel-sangat-kurang{ background:#fcebeb; border-color:#f09595; color:#a32d2d; font-weight:500; }
+  .warn-msg { font-size:12px; color:#a32d2d; margin-right:auto; display:none; align-items:center; gap:6px; }
+  .form-actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; padding:20px 0 8px; }
+  .success-wrap { text-align:center; padding:56px 32px; }
+  .suc-icon { width:64px; height:64px; border-radius:50%; background:#eaf3de; display:flex; align-items:center; justify-content:center; margin:0 auto 18px; }
+  .suc-icon i { font-size:30px; color:#3b6d11; }
+  .suc-title { font-size:20px; font-weight:600; margin-bottom:10px; }
+  .suc-sub { font-size:14px; color:var(--tx2); margin-bottom:28px; max-width:420px; margin-left:auto; margin-right:auto; }
+</style>
+</head>
+<body>
+
+<!-- ===== HOMEPAGE ===== -->
+<div id="page-homepage" class="page active">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div><div class="brand-text">Pengelolaan<br>Kinerja</div>
+      <div class="period-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Januari – Desember 2025</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><i class="ti ti-users" style="font-size:16px"></i><span>Sri Hariyati, S.Pd.</span><i class="ti ti-chevron-down" style="font-size:14px"></i></div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-item active" onclick="goTo('page-homepage')"><i class="ti ti-home"></i> Beranda</div>
+      <div class="sb-item" onclick="toggleSub(this)"><i class="ti ti-user"></i> Guru <i class="ti ti-chevron-down sb-chevron"></i></div>
+      <div class="sb-sub"><div class="sb-item sb-subitem" onclick="goTo('page-pegawai')">Sebagai Pegawai</div></div>
+      <div class="sb-item"><i class="ti ti-bell"></i> Notifikasi</div>
+      <div class="sb-item"><i class="ti ti-clock"></i> Riwayat</div>
+      <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
+    </div>
+    <div class="main">
+      <div class="page-title">Beranda</div>
+      <div class="page-sub">Selamat datang, Sri Hariyati, S.Pd.</div>
+      <div class="info-card">
+        <div class="info-card-icon"><i class="ti ti-bell"></i></div>
+        <div class="info-card-body">
+          <div class="info-card-title">Ada Tugas Menunggu Anda</div>
+          <div class="info-card-desc">Anda memiliki penilaian <strong>Umpan Balik 360°</strong> sebagai pegawai yang perlu diselesaikan sebelum <strong>31 Januari 2025</strong>.</div>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="goTo('page-pegawai')">Cek Detail</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SEBAGAI PEGAWAI PAGE ===== -->
+<div id="page-pegawai" class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div><div class="brand-text">Pengelolaan<br>Kinerja</div>
+      <div class="period-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Januari – Desember 2025</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><i class="ti ti-users" style="font-size:16px"></i><span>Sri Hariyati, S.Pd.</span><i class="ti ti-chevron-down" style="font-size:14px"></i></div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-item" onclick="goTo('page-homepage')"><i class="ti ti-home"></i> Beranda</div>
+      <div class="sb-item active" onclick="toggleSub(this)"><i class="ti ti-user"></i> Guru <i class="ti ti-chevron-down sb-chevron open"></i></div>
+      <div class="sb-sub open"><div class="sb-item sb-subitem active" onclick="goTo('page-pegawai')">Sebagai Pegawai</div></div>
+      <div class="sb-item"><i class="ti ti-bell"></i> Notifikasi</div>
+      <div class="sb-item"><i class="ti ti-clock"></i> Riwayat</div>
+      <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
+    </div>
+    <div class="main">
+      <div class="card">
+        <div class="pk-header">
+          <div class="progress-ring" style="background:conic-gradient(var(--accent) 120deg, #eaeaea 120deg)"><div class="progress-ring-inner"><span>1/3</span></div></div>
+          <div>
+            <div class="pk-title">Pelaksanaan Kinerja</div>
+            <div class="pk-desc">Laksanakan berdasarkan Perencanaan Anda. Pastikan semua Pelaksanaan sudah selesai sebelum Penetapan Predikat Kinerja dilakukan.</div>
+          </div>
+        </div>
+        <div class="list-row">
+          <div class="list-row-left">
+            <div class="list-row-icon" style="background:#fdf1da"><i class="ti ti-star" style="color:#d87800"></i></div>
+            <div>
+              <div class="list-row-title">Pelaksanaan Tugas Pokok</div>
+              <span class="badge bdg-pending">Belum Selesai</span>
+            </div>
+          </div>
+          <button class="btn btn-primary-blue btn-sm">Lakukan</button>
+        </div>
+        <div class="list-row">
+          <div class="list-row-left">
+            <div class="list-row-icon" style="background:#eaf3de"><i class="ti ti-sun" style="color:#3b6d11"></i></div>
+            <div>
+              <div class="list-row-title">Praktik Kinerja</div>
+              <span class="badge bdg-done">Sudah Selesai</span>
+            </div>
+          </div>
+          <button class="btn btn-sm">Cek</button>
+        </div>
+        <div class="list-row">
+          <div class="list-row-left">
+            <div class="list-row-icon" style="background:#dcebff"><i class="ti ti-books" style="color:var(--accent)"></i></div>
+            <div>
+              <div class="list-row-title">Pengembangan Kompetensi</div>
+              <span class="badge bdg-pending">Belum Selesai</span>
+            </div>
+          </div>
+          <button class="btn btn-primary-blue btn-sm">Lakukan</button>
+        </div>
+        <div class="list-row">
+          <div class="list-row-left">
+            <div class="list-row-icon" style="background:#f3e8ff"><i class="ti ti-mood-smile" style="color:#7e22ce"></i></div>
+            <div>
+              <div class="list-row-title">Perilaku Kerja</div>
+            </div>
+          </div>
+          <button class="btn btn-sm">Cek</button>
+        </div>
+      </div>
+      <div class="card-360-entry">
+        <div class="c360-left">
+          <div class="progress-ring" id="progress-ring"><div class="progress-ring-inner"><span id="progress-frac">0/4</span></div></div>
+          <div>
+            <div class="c360-title">Umpan Balik 360° – Sebagai Pemberi Umpan Balik</div>
+            <div class="c360-sub">Anda diminta memberikan umpan balik perilaku kerja untuk <strong>4 orang</strong> (1 pejabat penilai kinerja, 3 rekan sejawat). Deadline <strong>31 Januari 2025</strong>.</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="goTo('page-hub')">Cek Umpan Balik</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HUB PAGE ===== -->
+<div id="page-hub" class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div><div class="brand-text">Pengelolaan<br>Kinerja</div>
+      <div class="period-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Januari – Desember 2025</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><i class="ti ti-users" style="font-size:16px"></i><span>Sri Hariyati, S.Pd.</span></div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-item" onclick="goTo('page-homepage')"><i class="ti ti-home"></i> Beranda</div>
+      <div class="sb-item active" onclick="toggleSub(this)"><i class="ti ti-user"></i> Guru <i class="ti ti-chevron-down sb-chevron open"></i></div>
+      <div class="sb-sub open"><div class="sb-item sb-subitem active" onclick="goTo('page-pegawai')">Sebagai Pegawai</div></div>
+      <div class="sb-item"><i class="ti ti-bell"></i> Notifikasi</div>
+      <div class="sb-item"><i class="ti ti-clock"></i> Riwayat</div>
+      <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
+    </div>
+    <div class="main">
+      <button class="back-btn" onclick="goTo('page-pegawai')"><i class="ti ti-arrow-left"></i> Kembali</button>
+      <div class="page-title">Umpan Balik 360°</div>
+      <div class="page-sub">Mari selesaikan seluruh umpan balik di bawah ini sebelum 31 Januari 2025.</div>
+      <div class="notice-box"><i class="ti ti-lock"></i> Semua umpan balik bersifat anonim dan tidak akan ditampilkan secara individual kepada yang dinilai.</div>
+
+      <div class="filter-row">
+        <button class="filter-pill active" onclick="filterRel('all', this)">Semua (4)</button>
+        <button class="filter-pill" onclick="filterRel('atasan', this)">Pejabat Penilai Kinerja (1)</button>
+        <button class="filter-pill" onclick="filterRel('rekan', this)">Rekan Sejawat (3)</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <table class="assess-table">
+          <thead><tr><th>Nama</th><th>Jabatan</th><th>Hubungan</th><th>Sekolah</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr data-rel="atasan">
+              <td><div class="person-cell"><div class="person-av av-ks">BW</div><div class="person-name">Budi Waluyo, S.Pd., M.M.</div></div></td>
+              <td><span class="role-tag rt-ks"><i class="ti ti-building-school" style="font-size:11px"></i> Kepala Sekolah</span></td>
+              <td><span class="hub-tag"><i class="ti ti-arrow-up" style="font-size:12px;color:var(--accent)"></i> Pejabat Penilai Kinerja</span></td>
+              <td style="font-size:12px;color:var(--tx2)">SDN Merdeka 01</td>
+              <td><span class="badge bdg-pending" id="bdg-ks">Belum Dinilai</span></td>
+              <td><button class="btn btn-sm btn-primary" id="btn-ks" onclick="openForm('ks')"><i class="ti ti-message" style="font-size:12px"></i> Nilai</button></td>
+            </tr>
+            <tr data-rel="rekan">
+              <td><div class="person-cell"><div class="person-av av-guru">RD</div><div class="person-name">Ratna Dewi, S.Pd.</div></div></td>
+              <td><span class="role-tag rt-guru"><i class="ti ti-school" style="font-size:11px"></i> Guru</span></td>
+              <td><span class="hub-tag"><i class="ti ti-arrows-horizontal" style="font-size:12px;color:#3b6d11"></i> Rekan Sejawat</span></td>
+              <td style="font-size:12px;color:var(--tx2)">SDN Merdeka 01</td>
+              <td><span class="badge bdg-pending" id="bdg-guru1">Belum Dinilai</span></td>
+              <td><button class="btn btn-sm btn-primary" id="btn-guru1" onclick="openForm('guru1')"><i class="ti ti-message" style="font-size:12px"></i> Nilai</button></td>
+            </tr>
+            <tr data-rel="rekan">
+              <td><div class="person-cell"><div class="person-av av-guru">AS</div><div class="person-name">Ahmad Sutrisno, S.Pd.</div></div></td>
+              <td><span class="role-tag rt-guru"><i class="ti ti-school" style="font-size:11px"></i> Guru</span></td>
+              <td><span class="hub-tag"><i class="ti ti-arrows-horizontal" style="font-size:12px;color:#3b6d11"></i> Rekan Sejawat</span></td>
+              <td style="font-size:12px;color:var(--tx2)">SDN Merdeka 01</td>
+              <td><span class="badge bdg-pending" id="bdg-guru2">Belum Dinilai</span></td>
+              <td><button class="btn btn-sm btn-primary" id="btn-guru2" onclick="openForm('guru2')"><i class="ti ti-message" style="font-size:12px"></i> Nilai</button></td>
+            </tr>
+            <tr data-rel="rekan">
+              <td><div class="person-cell"><div class="person-av av-guru">NW</div><div class="person-name">Nur Wahyuni, S.Pd.</div></div></td>
+              <td><span class="role-tag rt-guru"><i class="ti ti-school" style="font-size:11px"></i> Guru</span></td>
+              <td><span class="hub-tag"><i class="ti ti-arrows-horizontal" style="font-size:12px;color:#3b6d11"></i> Rekan Sejawat</span></td>
+              <td style="font-size:12px;color:var(--tx2)">SDN Merdeka 01</td>
+              <td><span class="badge bdg-pending" id="bdg-guru3">Belum Dinilai</span></td>
+              <td><button class="btn btn-sm btn-primary" id="btn-guru3" onclick="openForm('guru3')"><i class="ti ti-message" style="font-size:12px"></i> Nilai</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORM PAGE ===== -->
+<div id="page-form" class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div><div class="brand-text">Pengelolaan<br>Kinerja</div>
+      <div class="period-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Januari – Desember 2025</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><i class="ti ti-users" style="font-size:16px"></i><span>Sri Hariyati, S.Pd.</span></div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-item" onclick="goTo('page-homepage')"><i class="ti ti-home"></i> Beranda</div>
+      <div class="sb-item active" onclick="toggleSub(this)"><i class="ti ti-user"></i> Guru <i class="ti ti-chevron-down sb-chevron open"></i></div>
+      <div class="sb-sub open"><div class="sb-item sb-subitem active" onclick="goTo('page-pegawai')">Sebagai Pegawai</div></div>
+      <div class="sb-item"><i class="ti ti-bell"></i> Notifikasi</div>
+      <div class="sb-item"><i class="ti ti-clock"></i> Riwayat</div>
+      <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
+    </div>
+    <div class="main">
+      <button class="back-btn" onclick="goTo('page-hub')"><i class="ti ti-arrow-left"></i> Kembali ke Daftar</button>
+      <div class="page-title">Umpan Balik Perilaku Kerja</div>
+      <div class="subject-header">
+        <div class="subject-av av-ks" id="form-av">BW</div>
+        <div>
+          <div class="subject-name" id="form-name">Memuat...</div>
+          <div class="subject-meta"><span id="form-role-tag"></span><span id="form-school" style="font-size:12px;color:var(--tx2)"></span></div>
+        </div>
+      </div>
+      <div class="form-wrap">
+        <table class="peri-table">
+          <thead><tr><th style="width:36px">No.</th><th style="width:130px">Aspek</th><th>Deskripsi Aspek</th><th style="width:260px">Umpan Balik</th></tr></thead>
+          <tbody id="peri-tbody"></tbody>
+        </table>
+      </div>
+      <div class="form-actions">
+        <span class="warn-msg" id="warn-msg"><i class="ti ti-alert-circle"></i> Lengkapi seluruh <span id="aspek-count">7</span> aspek sebelum mengirim.</span>
+        <button class="btn" onclick="goTo('page-hub')">Batal</button>
+        <button class="btn btn-primary-blue" id="btn-submit" disabled onclick="trySubmit()"><i class="ti ti-check" style="font-size:14px"></i> Kirim Umpan Balik</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS ===== -->
+<div id="page-success" class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-box"><i class="ti ti-feather"></i></div><div class="brand-text">Pengelolaan<br>Kinerja</div>
+      <div class="period-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Januari – Desember 2025</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><i class="ti ti-users" style="font-size:16px"></i><span>Sri Hariyati, S.Pd.</span></div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-item" onclick="goTo('page-homepage')"><i class="ti ti-home"></i> Beranda</div>
+      <div class="sb-item active" onclick="toggleSub(this)"><i class="ti ti-user"></i> Guru <i class="ti ti-chevron-down sb-chevron open"></i></div>
+      <div class="sb-sub open"><div class="sb-item sb-subitem active" onclick="goTo('page-pegawai')">Sebagai Pegawai</div></div>
+      <div class="sb-item"><i class="ti ti-bell"></i> Notifikasi</div>
+      <div class="sb-item"><i class="ti ti-clock"></i> Riwayat</div>
+      <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
+    </div>
+    <div class="main">
+      <div class="card">
+        <div class="success-wrap">
+          <div class="suc-icon"><i class="ti ti-check"></i></div>
+          <div class="suc-title">Umpan Balik berhasil dikirim!</div>
+          <div class="suc-sub">Terima kasih. Umpan balik perilaku kerja telah disimpan. Hasil bersifat anonim dan tidak dapat diakses atau dilihat oleh yang dinilai secara langsung.</div>
+          <button class="btn btn-primary" onclick="goTo('page-hub')"><i class="ti ti-list" style="font-size:14px"></i> Kembali ke Daftar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const perilakuData = [
+  {no:1,aspek:"Berorientasi Pelayanan",deskripsi:"Berkomitmen memberikan pelayanan prima demi kepuasan masyarakat"},
+  {no:2,aspek:"Akuntabel",deskripsi:"Bertanggung jawab atas kepercayaan yang diberikan"},
+  {no:3,aspek:"Kompeten",deskripsi:"Terus belajar dan mengembangkan kapabilitas"},
+  {no:4,aspek:"Harmonis",deskripsi:"Saling peduli dan menghargai perbedaan"},
+  {no:5,aspek:"Loyal",deskripsi:"Berdedikasi dan mengutamakan kepentingan Bangsa dan Negara"},
+  {no:6,aspek:"Adaptif",deskripsi:"Terus berinovasi dan antusias dalam menggerakkan serta menghadapi perubahan"},
+  {no:7,aspek:"Kolaboratif",deskripsi:"Membangun kerja sama yang sinergis"}
+];
+const subjects = {
+  ks:    {initials:"BW",name:"Budi Waluyo, S.Pd., M.M.",jabatan:"Kepala Sekolah",jabatanClass:"rt-ks",icon:"ti-building-school",school:"SDN Merdeka 01",avClass:"av-ks"},
+  guru1: {initials:"RD",name:"Ratna Dewi, S.Pd.",jabatan:"Guru",jabatanClass:"rt-guru",icon:"ti-school",school:"SDN Merdeka 01",avClass:"av-guru"},
+  guru2: {initials:"AS",name:"Ahmad Sutrisno, S.Pd.",jabatan:"Guru",jabatanClass:"rt-guru",icon:"ti-school",school:"SDN Merdeka 01",avClass:"av-guru"},
+  guru3: {initials:"NW",name:"Nur Wahyuni, S.Pd.",jabatan:"Guru",jabatanClass:"rt-guru",icon:"ti-school",school:"SDN Merdeka 01",avClass:"av-guru"}
+};
+const likertOpts = [
+  {key:"sangat_baik",  label:"Sangat Baik",    cls:"sel-sangat-baik"},
+  {key:"baik",         label:"Baik",            cls:"sel-baik"},
+  {key:"butuh",        label:"Butuh Perbaikan", cls:"sel-butuh"},
+  {key:"kurang",       label:"Kurang",          cls:"sel-kurang"},
+  {key:"sangat_kurang",label:"Sangat Kurang",   cls:"sel-sangat-kurang"}
+];
+let answered = {};
+let submitted = new Set();
+let currentKey = null;
+function goTo(id) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+function toggleSub(el) {
+  const sub = el.nextElementSibling;
+  const chevron = el.querySelector('.sb-chevron');
+  sub.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterRel(rel, btn) {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#page-hub table.assess-table tbody tr').forEach(tr => {
+    tr.style.display = (rel === 'all' || tr.dataset.rel === rel) ? '' : 'none';
+  });
+}
+function markRowDone(key) {
+  const badge = document.getElementById('bdg-' + key);
+  if (badge) { badge.textContent = 'Sudah Dinilai'; badge.className = 'badge bdg-done'; }
+  const btn = document.getElementById('btn-' + key);
+  if (btn) { btn.outerHTML = '<span class="badge bdg-done"><i class="ti ti-check" style="font-size:11px"></i> Selesai</span>'; }
+}
+function updatePendingSummary() {
+  const total = Object.keys(subjects).length;
+  const ring = document.getElementById('progress-ring');
+  const frac = document.getElementById('progress-frac');
+  if (ring && frac) {
+    frac.textContent = `${submitted.size}/${total}`;
+    const deg = total ? (submitted.size / total) * 360 : 0;
+    ring.style.background = `conic-gradient(var(--accent) ${deg}deg, #eaeaea ${deg}deg)`;
+  }
+}
+function openForm(key) {
+  const s = subjects[key];
+  currentKey = key;
+  answered = {};
+  const av = document.getElementById('form-av');
+  av.textContent = s.initials; av.className = 'subject-av ' + s.avClass;
+  document.getElementById('form-name').textContent = s.name;
+  document.getElementById('form-role-tag').innerHTML = `<span class="role-tag ${s.jabatanClass}"><i class="ti ${s.icon}" style="font-size:11px"></i> ${s.jabatan}</span>`;
+  document.getElementById('form-school').textContent = s.school;
+  const tbody = document.getElementById('peri-tbody');
+  tbody.innerHTML = '';
+  perilakuData.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:var(--tx3);font-size:12px">${row.no}.</td>
+      <td style="font-weight:500;font-size:13px">${row.aspek}</td>
+      <td style="font-size:13px;color:var(--tx2);line-height:1.55">${row.deskripsi}</td>
+      <td><div class="likert-group">${likertOpts.map(o=>`<label class="likert-opt" id="opt-${row.no}-${o.key}" onclick="selLikert(${row.no},'${o.key}','${o.cls}')"><input type="radio" name="l-${row.no}" value="${o.key}"> ${o.label}</label>`).join('')}</div></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('warn-msg').style.display = 'none';
+  goTo('page-form');
+}
+function selLikert(n, key, cls) {
+  likertOpts.forEach(o => {
+    const el = document.getElementById(`opt-${n}-${o.key}`);
+    if (!el) return;
+    el.className = 'likert-opt' + (o.key===key ? ' '+cls : '');
+    el.querySelector('input').checked = o.key===key;
+  });
+  answered[n] = key;
+  const complete = Object.keys(answered).length === perilakuData.length;
+  document.getElementById('btn-submit').disabled = !complete;
+}
+function trySubmit() {
+  if (Object.keys(answered).length < perilakuData.length) { document.getElementById('warn-msg').style.display = 'inline-flex'; return; }
+  submitted.add(currentKey);
+  markRowDone(currentKey);
+  updatePendingSummary();
+  goTo('page-success');
+}
+document.getElementById('aspek-count').textContent = perilakuData.length;
+updatePendingSummary();
+document.querySelectorAll('.sb-item[onclick]').forEach(el => {
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+});
+</script>
+</body>
+</html>
