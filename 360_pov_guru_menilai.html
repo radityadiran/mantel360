@@ -50,8 +50,6 @@
   .badge { display:inline-flex; align-items:center; font-size:11px; padding:3px 10px; border-radius:999px; font-weight:500; white-space:nowrap; }
   .bdg-done    { background:#eaf3de; color:#3b6d11; }
   .bdg-pending { background:#faeeda; color:#854f0b; }
-  .card-360-entry { background:var(--bg1); border:0.5px solid #c3d9f8; border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-  .card-360-entry .btn { flex-shrink:0; }
   .info-card { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; gap:16px; }
   .info-card-icon { width:40px; height:40px; border-radius:50%; background:#fdf1da; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .info-card-icon i { font-size:20px; color:#d87800; }
@@ -59,23 +57,13 @@
   .info-card-title { font-size:15px; font-weight:600; margin-bottom:4px; }
   .info-card-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
   .info-card .btn { flex-shrink:0; }
-  .c360-left { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
-  .c360-left > div:last-child { min-width:0; flex:1; }
-  .c360-icon { width:44px; height:44px; border-radius:var(--r); background:#dcebff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .c360-icon i { font-size:22px; color:var(--accent); }
-  .progress-ring { width:60px; height:60px; border-radius:50%; background:conic-gradient(#eaeaea 0deg, #eaeaea 0deg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .progress-ring-inner { width:46px; height:46px; border-radius:50%; background:var(--bg1); display:flex; align-items:center; justify-content:center; }
-  .progress-ring-inner span { font-size:14px; font-weight:700; color:var(--tx1); }
-  .pk-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
-  .pk-title { font-size:16px; font-weight:600; margin-bottom:4px; }
-  .pk-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
-  .list-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:0.5px solid var(--bd3); }
-  .list-row:last-child { border-bottom:none; padding-bottom:0; }
-  .list-row-left { display:flex; align-items:center; gap:14px; min-width:0; }
-  .list-row-icon { width:40px; height:40px; border-radius:var(--r); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
-  .list-row-title { font-size:14px; font-weight:500; margin-bottom:4px; }
-  .c360-title { font-size:15px; font-weight:500; margin-bottom:2px; }
-  .c360-sub { font-size:13px; color:var(--tx2); }
+  .entry-card { background:var(--bg1); border:0.5px solid var(--bd3); border-radius:var(--rl); padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; gap:20px; }
+  .entry-icon { width:48px; height:48px; border-radius:var(--rl); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .entry-icon i { font-size:24px; }
+  .entry-body { flex:1; min-width:0; }
+  .entry-title { font-size:16px; font-weight:700; margin-bottom:4px; }
+  .entry-desc { font-size:13px; color:var(--tx2); line-height:1.55; }
+  .entry-card .btn { flex-shrink:0; }
   .back-btn { display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--tx2); cursor:pointer; margin-bottom:20px; padding:0; background:none; border:none; font-family:inherit; }
   .back-btn:hover { color:var(--tx1); }
   .page-title { font-size:22px; font-weight:600; }
@@ -185,61 +173,27 @@
       <div class="sb-item"><i class="ti ti-help"></i> Butuh Bantuan</div>
     </div>
     <div class="main">
-      <div class="card">
-        <div class="pk-header">
-          <div class="progress-ring" style="background:conic-gradient(var(--accent) 120deg, #eaeaea 120deg)"><div class="progress-ring-inner"><span>1/3</span></div></div>
-          <div>
-            <div class="pk-title">Pelaksanaan Kinerja</div>
-            <div class="pk-desc">Laksanakan berdasarkan Perencanaan Anda. Pastikan semua Pelaksanaan sudah selesai sebelum Penetapan Predikat Kinerja dilakukan.</div>
-          </div>
+      <div class="entry-card">
+        <div class="entry-icon" style="background:#dcebff"><i class="ti ti-clipboard-text" style="color:var(--accent)"></i></div>
+        <div class="entry-body">
+          <div class="entry-title">Mulai Perencanaan Kinerja</div>
+          <div class="entry-desc">Isi Pelaksanaan Tugas Pokok, Praktik Kinerja, Pengembangan Kompetensi, dan Perilaku Kerja. Diskusikan juga dengan Kepala Sekolah.</div>
         </div>
-        <div class="list-row">
-          <div class="list-row-left">
-            <div class="list-row-icon" style="background:#fdf1da"><i class="ti ti-star" style="color:#d87800"></i></div>
-            <div>
-              <div class="list-row-title">Pelaksanaan Tugas Pokok</div>
-              <span class="badge bdg-pending">Belum Selesai</span>
-            </div>
-          </div>
-          <button class="btn btn-primary-blue btn-sm">Lakukan</button>
-        </div>
-        <div class="list-row">
-          <div class="list-row-left">
-            <div class="list-row-icon" style="background:#eaf3de"><i class="ti ti-sun" style="color:#3b6d11"></i></div>
-            <div>
-              <div class="list-row-title">Praktik Kinerja</div>
-              <span class="badge bdg-done">Sudah Selesai</span>
-            </div>
-          </div>
-          <button class="btn btn-sm">Cek</button>
-        </div>
-        <div class="list-row">
-          <div class="list-row-left">
-            <div class="list-row-icon" style="background:#dcebff"><i class="ti ti-books" style="color:var(--accent)"></i></div>
-            <div>
-              <div class="list-row-title">Pengembangan Kompetensi</div>
-              <span class="badge bdg-pending">Belum Selesai</span>
-            </div>
-          </div>
-          <button class="btn btn-primary-blue btn-sm">Lakukan</button>
-        </div>
-        <div class="list-row">
-          <div class="list-row-left">
-            <div class="list-row-icon" style="background:#f3e8ff"><i class="ti ti-mood-smile" style="color:#7e22ce"></i></div>
-            <div>
-              <div class="list-row-title">Perilaku Kerja</div>
-            </div>
-          </div>
-          <button class="btn btn-sm">Cek</button>
-        </div>
+        <button class="btn btn-primary-blue btn-lg">Mulai</button>
       </div>
-      <div class="card-360-entry">
-        <div class="c360-left">
-          <div class="progress-ring" id="progress-ring"><div class="progress-ring-inner"><span id="progress-frac">0/4</span></div></div>
-          <div>
-            <div class="c360-title">Umpan Balik 360° – Sebagai Pemberi Umpan Balik</div>
-            <div class="c360-sub">Anda diminta memberikan umpan balik perilaku kerja untuk <strong>4 orang</strong> (1 pejabat penilai kinerja, 3 rekan sejawat). Deadline <strong>31 Januari 2025</strong>.</div>
-          </div>
+      <div class="entry-card">
+        <div class="entry-icon" style="background:#f3e8ff"><i class="ti ti-calendar-event" style="color:#7e22ce"></i></div>
+        <div class="entry-body">
+          <div class="entry-title">Kinerja Harian</div>
+          <div class="entry-desc">Catat kinerja harian agar selaras dan turut mendukung kinerja periodik dan tahunan, sesuai Permen PANRB No. 6 Tahun 2022 dan kebijakan <strong>Pemerintah Daerah</strong>.</div>
+        </div>
+        <button class="btn btn-primary btn-lg">Ke Kinerja Harian</button>
+      </div>
+      <div class="entry-card">
+        <div class="entry-icon" style="background:#eaf3de"><i class="ti ti-refresh" style="color:#3b6d11"></i></div>
+        <div class="entry-body">
+          <div class="entry-title">Umpan Balik 360° – Sebagai Pemberi Umpan Balik</div>
+          <div class="entry-desc">Anda diminta memberikan umpan balik perilaku kerja untuk <strong>4 orang</strong> (1 pejabat penilai kinerja, 3 rekan sejawat). Deadline <strong>31 Januari 2025</strong>.</div>
         </div>
         <button class="btn btn-primary btn-lg" onclick="goTo('page-hub')">Cek Umpan Balik</button>
       </div>
@@ -446,16 +400,6 @@ function markRowDone(key) {
   const btn = document.getElementById('btn-' + key);
   if (btn) { btn.outerHTML = '<span class="badge bdg-done"><i class="ti ti-check" style="font-size:11px"></i> Selesai</span>'; }
 }
-function updatePendingSummary() {
-  const total = Object.keys(subjects).length;
-  const ring = document.getElementById('progress-ring');
-  const frac = document.getElementById('progress-frac');
-  if (ring && frac) {
-    frac.textContent = `${submitted.size}/${total}`;
-    const deg = total ? (submitted.size / total) * 360 : 0;
-    ring.style.background = `conic-gradient(var(--accent) ${deg}deg, #eaeaea ${deg}deg)`;
-  }
-}
 function openForm(key) {
   const s = subjects[key];
   currentKey = key;
@@ -495,11 +439,9 @@ function trySubmit() {
   if (Object.keys(answered).length < perilakuData.length) { document.getElementById('warn-msg').style.display = 'inline-flex'; return; }
   submitted.add(currentKey);
   markRowDone(currentKey);
-  updatePendingSummary();
   goTo('page-success');
 }
 document.getElementById('aspek-count').textContent = perilakuData.length;
-updatePendingSummary();
 document.querySelectorAll('.sb-item[onclick]').forEach(el => {
   el.setAttribute('tabindex', '0');
   el.setAttribute('role', 'button');
