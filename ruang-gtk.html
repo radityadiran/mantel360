@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruang GTK – Rumah Pendidikan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0&display=block" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --action-default:#0954d9; --action-hovered:#0746bd; --action-pressed:#04287e;
+    --text-default:#323232; --text-subdued:#65686c;
+    --gray-5:#f1f1f1; --gray-10:#d8d8d8; --border-subdued:#e0e2e5;
+    --font:'Inter','Inter Variable',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  body{ font-family:var(--font); color:var(--text-default); background:#fff; }
+  .material-symbols-outlined{ font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+
+  .rp-banner{ background:#ffe6b8; color:#5a3d00; font-size:0.8125rem; font-weight:600; text-align:center; padding:8px 16px; }
+
+  .rp-topbar{ display:flex; align-items:center; gap:20px; padding:14px 32px; border-bottom:1px solid var(--border-subdued); }
+  .rp-logo{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .rp-logo img{ height:32px; }
+  .rp-logo-text{ font-weight:700; font-size:1.0625rem; color:#04287e; line-height:1.15; }
+  .rp-search{ flex:1; max-width:520px; display:flex; align-items:center; gap:8px; border:1px solid var(--gray-10); border-radius:8px; padding:9px 14px; color:var(--text-subdued); font-size:0.875rem; }
+  .rp-search .material-symbols-outlined{ font-size:18px; }
+  .rp-topbar-right{ margin-left:auto; display:flex; align-items:center; gap:18px; color:var(--text-subdued); }
+  .rp-avatar{ width:30px; height:30px; border-radius:50%; background:#8b5cf6; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8125rem; }
+
+  .rp-hero-wrap{ padding:32px; }
+  .rp-hero-head{ display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+  .rp-hero-icon{ width:34px; height:34px; border-radius:8px; background:#dbeafe; display:flex; align-items:center; justify-content:center; }
+  .rp-hero-icon .material-symbols-outlined{ color:var(--action-default); font-size:20px; }
+  .rp-hero-title{ font-size:1.5rem; font-weight:700; }
+  .rp-hero-sub{ color:var(--text-subdued); font-size:0.9375rem; margin:6px 0 20px 46px; }
+
+  .rp-carousel{ background:linear-gradient(120deg,#0b3fae,#0954d9); border-radius:16px; padding:32px 40px; display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:220px; position:relative; overflow:hidden; }
+  .rp-carousel-copy{ color:#fff; max-width:420px; }
+  .rp-carousel-copy .eyebrow{ font-size:1.5rem; font-weight:700; line-height:1.25; }
+  .rp-carousel-copy .highlight{ display:inline-block; background:#5b8def; padding:2px 10px; border-radius:6px; font-weight:700; margin-top:4px; }
+  .rp-carousel-cta{ margin-top:18px; display:inline-block; background:#ffc633; color:#4a3300; font-weight:700; font-size:0.875rem; padding:10px 20px; border-radius:8px; }
+  .rp-dots{ display:flex; justify-content:center; gap:6px; margin-top:16px; }
+  .rp-dot{ width:7px; height:7px; border-radius:50%; background:var(--gray-10); }
+  .rp-dot.active{ background:var(--action-default); width:18px; border-radius:4px; }
+
+  .rp-services{ background:#f5f6f8; padding:40px 32px 56px; }
+  .rp-services-title{ font-size:1.375rem; font-weight:700; margin-bottom:24px; }
+  .rp-group{ margin-bottom:28px; }
+  .rp-group-title{ font-size:1.0625rem; font-weight:700; margin-bottom:14px; }
+  .rp-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media (max-width:1100px){ .rp-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:640px){ .rp-grid{ grid-template-columns:1fr; } }
+
+  .rp-card{ background:#fff; border:1px solid var(--border-subdued); border-radius:10px; padding:18px; display:flex; flex-direction:column; gap:10px; text-decoration:none; color:inherit; min-height:118px; transition:border-color .12s, box-shadow .12s; }
+  .rp-card:hover{ border-color:var(--action-default); box-shadow:0 2px 10px rgba(9,84,217,.1); }
+  .rp-card-head{ display:flex; align-items:center; gap:10px; }
+  .rp-card-icon{ width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rp-card-icon .material-symbols-outlined{ font-size:18px; color:#fff; }
+  .rp-card-title{ font-weight:700; font-size:0.9375rem; }
+  .rp-card-desc{ font-size:0.8125rem; color:var(--text-subdued); line-height:1.45; flex:1; }
+  .rp-card-arrow{ color:var(--action-default); }
+  .rp-card-arrow .material-symbols-outlined{ font-size:18px; }
+  .rp-card.rp-featured{ border-color:var(--action-default); border-width:2px; box-shadow:0 4px 16px rgba(9,84,217,.14); }
+
+  .rp-footer{ background:#161616; color:#c9cbcf; padding:36px 32px; display:flex; flex-wrap:wrap; gap:48px; }
+  .rp-footer-brand{ display:flex; gap:14px; max-width:320px; }
+  .rp-footer-brand img{ width:44px; height:44px; flex-shrink:0; }
+  .rp-footer-brand h4{ color:#fff; font-size:0.9375rem; margin-bottom:6px; }
+  .rp-footer-brand p{ font-size:0.8125rem; line-height:1.5; }
+  .rp-footer-col h5{ color:#fff; font-size:0.9375rem; margin-bottom:12px; }
+  .rp-footer-col a{ display:block; color:#c9cbcf; font-size:0.8125rem; text-decoration:none; margin-bottom:10px; }
+  .rp-footer-col a:hover{ color:#fff; }
+</style>
+</head>
+<body>
+
+  <div class="rp-banner">🧪 Ini branch prototype internal, bukan tampilan resmi Rumah Pendidikan — hanya untuk demo alur Pengelolaan Kinerja.</div>
+
+  <div class="rp-topbar">
+    <div class="rp-logo">
+      <div class="rp-hero-icon" style="background:#e6e6e6"><span class="material-symbols-outlined" style="color:#04287e">school</span></div>
+      <div class="rp-logo-text">Rumah<br>Pendidikan</div>
+    </div>
+    <div class="rp-search"><span class="material-symbols-outlined">search</span> Contoh: Pembelajaran, Panduan, dsb...</div>
+    <div class="rp-topbar-right">
+      <span class="material-symbols-outlined">help</span>
+      <span class="material-symbols-outlined">apps</span>
+      <div class="rp-avatar">R</div>
+    </div>
+  </div>
+
+  <div class="rp-hero-wrap">
+    <div class="rp-hero-head">
+      <div class="rp-hero-icon"><span class="material-symbols-outlined">menu_book</span></div>
+      <div class="rp-hero-title">Ruang GTK</div>
+    </div>
+    <div class="rp-hero-sub">Sumber inspirasi peningkatan kompetensi serta kinerja Guru dan Tenaga Kependidikan (GTK)</div>
+
+    <div class="rp-carousel">
+      <div class="rp-carousel-copy">
+        <div class="eyebrow">Lebih Mudah dengan Rumah Pendidikan</div>
+        <div class="highlight">Versi Terbaru</div>
+        <div><span class="rp-carousel-cta">Cek di sini</span></div>
+      </div>
+    </div>
+    <div class="rp-dots"><span class="rp-dot active"></span><span class="rp-dot"></span><span class="rp-dot"></span></div>
+  </div>
+
+  <div class="rp-services">
+    <div class="rp-services-title">Layanan yang Tersedia</div>
+
+    <div class="rp-group">
+      <div class="rp-group-title">Belajar Berkelanjutan</div>
+      <div class="rp-grid">
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">calendar_month</span></div><div class="rp-card-title">Diklat</div></div>
+          <div class="rp-card-desc">Pelatihan terbimbing menggunakan LMS</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#e0a324"><span class="material-symbols-outlined">workspace_premium</span></div><div class="rp-card-title">Sertifikasi Pendidik</div></div>
+          <div class="rp-card-desc">Pendidikan Profesi Guru (PPG) bagi Guru Tertentu</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#d9534f"><span class="material-symbols-outlined">auto_stories</span></div><div class="rp-card-title">Pelatihan Mandiri</div></div>
+          <div class="rp-card-desc">Materi untuk pengembangan kompetensi guru dan tendik</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f9e6e"><span class="material-symbols-outlined">groups</span></div><div class="rp-card-title">Komunitas</div></div>
+          <div class="rp-card-desc">144.000+ komunitas guru & tendik berbagi praktik baik</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-group">
+      <div class="rp-group-title">Karir dan Kinerja</div>
+      <div class="rp-grid">
+        <a class="rp-card rp-featured" href="index.html">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">military_tech</span></div><div class="rp-card-title">Pengelolaan Kinerja</div></div>
+          <div class="rp-card-desc">Perencanaan, pelaksanaan, dan penilaian kinerja Anda untuk pengembangan diri...</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </a>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">manage_accounts</span></div><div class="rp-card-title">Seleksi Kepala Sekolah</div></div>
+          <div class="rp-card-desc">Info persyaratan, tahapan, & cek kualifikasi untuk seleksi</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#e0a324"><span class="material-symbols-outlined">insights</span></div><div class="rp-card-title">Refleksi Kompetensi</div></div>
+          <div class="rp-card-desc">Rekomendasi pembelajaran yang disusun personal untuk Anda</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-group">
+      <div class="rp-group-title">Inspirasi Pembelajaran</div>
+      <div class="rp-grid">
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">description</span></div><div class="rp-card-title">Perangkat Ajar</div></div>
+          <div class="rp-card-desc">Inspirasi perencanaan pembelajaran intrakurikuler & kokurikuler, bahan ajar...</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#e0a324"><span class="material-symbols-outlined">flag</span></div><div class="rp-card-title">CP/ATP</div></div>
+          <div class="rp-card-desc">Capaian Pembelajaran dan Alur Tujuan Pembelajaran sesuai mata pelajaran Anda</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#e0a324"><span class="material-symbols-outlined">lightbulb</span></div><div class="rp-card-title">Ide Praktik</div></div>
+          <div class="rp-card-desc">Praktik baik terpilih untuk menghadirkan pembelajaran yang bermakna...</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">image</span></div><div class="rp-card-title">Bukti Karya</div></div>
+          <div class="rp-card-desc">Rekam jejak karya, kinerja, dan kompetensi pendidik</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">smart_display</span></div><div class="rp-card-title">Video Inspirasi</div></div>
+          <div class="rp-card-desc">Kumpulan video terpilih berisi penerapan praktik baik</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#e0a324"><span class="material-symbols-outlined">quiz</span></div><div class="rp-card-title">Asesmen (Asesmen Murid & AKM Kelas)</div></div>
+          <div class="rp-card-desc">Ragam asesmen untuk memetakan dan memantau perkembangan belajar</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#d9534f"><span class="material-symbols-outlined">groups_2</span></div><div class="rp-card-title">Kelas</div></div>
+          <div class="rp-card-desc">Informasi atau data kelompok murid berdasarkan hasil asesmen</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-group" style="margin-bottom:0">
+      <div class="rp-group-title">Dokumen dan Regulasi Rujukan</div>
+      <div class="rp-grid">
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">menu_book</span></div><div class="rp-card-title">Pengelolaan Pembelajaran</div></div>
+          <div class="rp-card-desc">Dokumen rujukan untuk Pengelolaan Pembelajaran</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">menu_book</span></div><div class="rp-card-title">Pengelolaan Kinerja</div></div>
+          <div class="rp-card-desc">Dokumen rujukan untuk Pengelolaan Kinerja</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">menu_book</span></div><div class="rp-card-title">Peningkatan Kompetensi</div></div>
+          <div class="rp-card-desc">Dokumen rujukan untuk Peningkatan Kompetensi</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-card-head"><div class="rp-card-icon" style="background:#2f6fed"><span class="material-symbols-outlined">menu_book</span></div><div class="rp-card-title">Pengelolaan Satuan Pendidikan</div></div>
+          <div class="rp-card-desc">Dokumen rujukan untuk Pengelolaan Satuan Pendidikan</div>
+          <div class="rp-card-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rp-footer">
+    <div class="rp-footer-brand">
+      <div class="rp-hero-icon" style="background:#242424;flex-shrink:0"><span class="material-symbols-outlined" style="color:#fff">shield</span></div>
+      <div>
+        <h4>Kementerian Pendidikan Dasar dan Menengah</h4>
+        <p>Kompleks Kementerian Pendidikan dan Kebudayaan, Senayan, Jakarta Pusat 10270</p>
+      </div>
+    </div>
+    <div class="rp-footer-col">
+      <h5>Navigasi</h5>
+      <a href="#">Formulir Bantuan Rumah Pendidikan</a>
+      <a href="#">Syarat & Ketentuan</a>
+      <a href="#">Kebijakan Privasi</a>
+    </div>
+    <div class="rp-footer-col">
+      <h5>Unduh Aplikasi Rumah Pendidikan</h5>
+      <a href="#">Google Play &nbsp;·&nbsp; App Store</a>
+    </div>
+  </div>
+
+</body>
+</html>
