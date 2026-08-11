@@ -99,7 +99,7 @@
           <div class="c360-icon"><span class="material-symbols-outlined">sync_problem</span></div>
           <div>
             <div class="c360-title">Umpan Balik 360° – Sebagai Pemberi Umpan Balik</div>
-            <div class="c360-sub">Anda diminta memberikan umpan balik perilaku kerja untuk <strong>4 orang</strong> (1 pejabat penilai kinerja, 3 rekan sejawat). Deadline <strong>31 Januari 2025</strong>.</div>
+            <div class="c360-sub">Berikan umpan balik untuk Pejabat Penilai Kinerja dan Rekan Sejawat Anda</div>
           </div>
         </div>
         <button class="btn btn-black btn-lg" onclick="goTo('page-hub')">Cek Umpan Balik</button>
@@ -170,13 +170,6 @@
 
       <div class="qs-card">
         <div class="qs-header quota-card" id="quota-card-atasan">
-          <div class="quota-ring-wrap">
-            <svg width="56" height="56" viewBox="0 0 56 56">
-              <circle cx="28" cy="28" r="22" fill="none" stroke="var(--gray-10)" stroke-width="5"/>
-              <circle id="ring-atasan" cx="28" cy="28" r="22" fill="none" stroke="var(--action-default)" stroke-width="5" stroke-dasharray="0 138.2" stroke-linecap="round" transform="rotate(-90 28 28)"/>
-            </svg>
-            <div class="quota-ring-label" id="ring-atasan-label">0/1</div>
-          </div>
           <div class="qs-header-text">
             <div class="qs-eyebrow">Untuk Pejabat Penilai Kinerja:</div>
             <div class="qs-title" id="quota-atasan-title">0 Umpan Balik Sudah Diberikan</div>
@@ -208,17 +201,10 @@
 
       <div class="qs-card">
         <div class="qs-header quota-card" id="quota-card-rekan">
-          <div class="quota-ring-wrap">
-            <svg width="56" height="56" viewBox="0 0 56 56">
-              <circle cx="28" cy="28" r="22" fill="none" stroke="var(--gray-10)" stroke-width="5"/>
-              <circle id="ring-rekan" cx="28" cy="28" r="22" fill="none" stroke="var(--action-default)" stroke-width="5" stroke-dasharray="0 138.2" stroke-linecap="round" transform="rotate(-90 28 28)"/>
-            </svg>
-            <div class="quota-ring-label" id="ring-rekan-label">0/3</div>
-          </div>
           <div class="qs-header-text">
             <div class="qs-eyebrow">Untuk Rekan Sejawat:</div>
             <div class="qs-title" id="quota-rekan-title">0 Umpan Balik Sudah Diberikan</div>
-            <div class="qs-desc qs-desc-1line">Anda wajib memberikan umpan balik untuk minimal 3 rekan. Makin banyak umpan balik yang diberikan, makin banyak rekan yang terbantu.</div>
+            <div class="qs-desc qs-desc-1line">Berikan umpan balik untuk rekan sejawat. Makin banyak umpan balik yang diberikan, makin banyak rekan yang terbantu.</div>
           </div>
         </div>
         <div class="qs-table-scroll"><table class="assess-table" id="tbl-rekan">
@@ -466,7 +452,6 @@ function markRowDone(key) {
   updateQuota();
 }
 const REQUIRED = { atasan: 1, rekan: 3 };
-const RING_CIRCUMFERENCE = 138.2;
 function updateQuota() {
   const rows = document.querySelectorAll('#page-hub table.assess-table tbody tr');
   let doneAtasan = 0, doneRekan = 0;
@@ -479,12 +464,7 @@ function updateQuota() {
   });
   const a = Math.min(doneAtasan, REQUIRED.atasan), r = Math.min(doneRekan, REQUIRED.rekan);
 
-  document.getElementById('ring-atasan-label').textContent = `${a}/${REQUIRED.atasan}`;
-  document.getElementById('ring-atasan').setAttribute('stroke-dasharray', `${(a / REQUIRED.atasan) * RING_CIRCUMFERENCE} ${RING_CIRCUMFERENCE}`);
   document.getElementById('quota-atasan-title').textContent = `${a} Umpan Balik Sudah Diberikan`;
-
-  document.getElementById('ring-rekan-label').textContent = `${r}/${REQUIRED.rekan}`;
-  document.getElementById('ring-rekan').setAttribute('stroke-dasharray', `${(r / REQUIRED.rekan) * RING_CIRCUMFERENCE} ${RING_CIRCUMFERENCE}`);
   document.getElementById('quota-rekan-title').textContent = `${r} Umpan Balik Sudah Diberikan`;
 }
 function openForm(key) {
