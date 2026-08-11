@@ -40,10 +40,10 @@
         <div class="info-card" style="padding:24px">
           <div class="info-card-icon"><span class="material-symbols-outlined">notifications</span></div>
           <div class="info-card-body">
-            <div class="info-card-title">Ada Tugas Menunggu Anda</div>
-            <div class="info-card-desc">Anda memiliki penilaian <strong>Umpan Balik 360°</strong> sebagai pegawai yang perlu diselesaikan sebelum <strong>31 Januari 2025</strong>.</div>
+            <div class="info-card-title">Berikan Umpan Balik ke Kepala Sekolah dan Rekan Sejawat</div>
+            <div class="info-card-desc">Kini Anda dapat memberikan umpan balik terkait aspek perilaku kerja ke Kepala Sekolah dan rekan Guru.</div>
           </div>
-          <button class="btn btn-black btn-lg" onclick="goTo('page-pegawai')">Cek Detail</button>
+          <button class="btn btn-black btn-lg" onclick="goTo('page-pegawai')">Cek Selengkapnya</button>
         </div>
       </div>
     </div>
@@ -98,11 +98,11 @@
         <div class="c360-left">
           <div class="c360-icon"><span class="material-symbols-outlined">sync_problem</span></div>
           <div>
-            <div class="c360-title">Umpan Balik 360° – Sebagai Pemberi Umpan Balik</div>
-            <div class="c360-sub">Berikan umpan balik untuk Pejabat Penilai Kinerja dan Rekan Sejawat Anda</div>
+            <div class="c360-title">Umpan Balik Rekan Sejawat dan Atasan</div>
+            <div class="c360-sub">Berikan umpan balik untuk Kepala Sekolah dan rekan Guru Anda. Umpan balik dapat membuat kolaborasi di Pengelolaan Kinerja makin selaras.</div>
           </div>
         </div>
-        <button class="btn btn-black btn-lg" onclick="goTo('page-hub')">Cek Umpan Balik</button>
+        <button class="btn btn-black btn-lg" onclick="goTo('page-hub')">Ke Halaman Umpan Balik</button>
       </div>
 
       <div class="pk-card pk-timeline">
@@ -323,7 +323,7 @@
     <div class="main">
       <div class="page-title-row">
         <button class="title-back-btn" onclick="goTo('page-hub')"><span class="material-symbols-outlined">arrow_back</span></button>
-        <div class="page-title">Umpan Balik Perilaku Kerja</div>
+        <div class="page-title">Pemberian Umpan Balik</div>
       </div>
       <div class="identity-form-wrap">
         <div class="subject-header-blue">
@@ -343,7 +343,7 @@
       <div class="form-actions">
         <span class="warn-msg" id="warn-msg"><span class="material-symbols-outlined" style="font-size:16px">error</span> Lengkapi seluruh <span id="aspek-count">7</span> aspek sebelum mengirim.</span>
         <button class="btn btn-outline btn-md" onclick="goTo('page-hub')">Batal</button>
-        <button class="btn btn-blue btn-md" id="btn-submit" disabled onclick="trySubmit()"><span class="material-symbols-outlined" style="font-size:16px">check</span> Kirim Umpan Balik</button>
+        <button class="btn btn-blue btn-md" id="btn-submit" disabled onclick="trySubmit()"><span class="material-symbols-outlined" style="font-size:16px">check</span> Simpan Umpan Balik</button>
       </div>
     </div>
   </div>
@@ -373,9 +373,9 @@
       <div class="card">
         <div class="success-wrap">
           <div class="suc-icon"><span class="material-symbols-outlined">check</span></div>
-          <div class="suc-title">Umpan Balik berhasil dikirim!</div>
-          <div class="suc-sub">Terima kasih. Umpan balik perilaku kerja telah disimpan. Hasil bersifat anonim dan tidak dapat diakses atau dilihat oleh yang dinilai secara langsung.</div>
-          <button class="btn btn-black btn-md" onclick="goTo('page-hub')"><span class="material-symbols-outlined" style="font-size:16px">list</span> Kembali ke Daftar</button>
+          <div class="suc-title">Berhasil simpan umpan balik!</div>
+          <div class="suc-sub">Umpan balik ditampilkan ke penerima secara anonim. Dengan memberikan umpan balik, Anda turut berkontribusi dalam menciptakan kolaborasi yang makin selaras. Terima kasih, ya.</div>
+          <button class="btn btn-black btn-md" onclick="goTo('page-hub')"><span class="material-symbols-outlined" style="font-size:16px">list</span> Kembali ke Halaman Umpan Balik</button>
         </div>
       </div>
     </div>
@@ -482,7 +482,7 @@ function openForm(key) {
       <td style="font-weight:700;font-size:0.875rem">${row.aspek}</td>
       <td style="font-size:0.875rem;line-height:1.55;color:#2f3031">${row.deskripsi}</td>
       <td><select class="likert-select" id="opt-${row.no}" onchange="selLikert(${row.no}, this.value)">
-        <option value="" selected disabled>Pilih penilaian</option>
+        <option value="" selected disabled>Pilih Umpan Balik</option>
         ${likertOpts.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}
       </select></td>`;
     tbody.appendChild(tr);
