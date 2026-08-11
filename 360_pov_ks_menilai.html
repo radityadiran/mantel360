@@ -246,6 +246,7 @@
       <button class="cheat-btn" onclick="setDemoState('empty')">Belum ngisi sama sekali</button>
       <button class="cheat-btn" onclick="setDemoState('partial')">Sudah ngisi sebagian</button>
       <button class="cheat-btn" onclick="setDemoState('full')">Kuota penuh</button>
+      <button class="cheat-btn" onclick="setDemoState('expired')">Beda periode - udah gabisa ngisi</button>
     </div>
   </div>
 </div>
@@ -274,6 +275,7 @@
         <button class="title-back-btn" onclick="goTo('page-hub')"><span class="material-symbols-outlined">arrow_back</span></button>
         <div class="page-title">Pemberian Umpan Balik</div>
       </div>
+      <div class="notice-box" id="form-readonly-notice" style="display:none"><span class="material-symbols-outlined">lock_clock</span> Periode penilaian untuk orang ini sudah berakhir. Anda hanya dapat melihat, tidak dapat mengubah umpan balik.</div>
       <div class="identity-form-wrap">
         <div class="subject-header-blue">
           <div>
@@ -375,10 +377,40 @@ function setRowState(key, done) {
 function setDemoState(state) {
   const required = ['ks1','ks2'];
   const optional = ['ks3','ks4','ks5','ks6'];
+  clearPeriodExpired();
   if (state === 'empty') { required.concat(optional).forEach(k => setRowState(k, false)); }
   else if (state === 'partial') { setRowState('ks1', true); ['ks2'].concat(optional).forEach(k => setRowState(k, false)); }
   else if (state === 'full') { required.forEach(k => setRowState(k, true)); optional.forEach(k => setRowState(k, false)); }
+  else if (state === 'expired') { setRowState('ks1', true); ['ks2'].concat(optional).forEach(k => setRowState(k, false)); setPeriodExpired(); }
   updateQuota();
+}
+function clearPeriodExpired() {
+  document.querySelectorAll('#page-hub table.assess-table tbody tr[data-rel]').forEach(tr => {
+    tr.classList.remove('qs-row-muted');
+    const btn = tr.querySelector('button');
+    if (!btn) return;
+    btn.disabled = false;
+    const key = btn.id.replace('btn-', '');
+    const badge = tr.querySelector('.badge');
+    if (badge && badge.classList.contains('bdg-done')) { btn.textContent = 'Ubah'; btn.className = 'btn btn-outline btn-sm'; btn.setAttribute('onclick', `openForm('${key}')`); }
+    else { btn.textContent = 'Berikan'; btn.className = 'btn btn-black btn-sm'; btn.setAttribute('onclick', `openForm('${key}')`); }
+  });
+}
+function setPeriodExpired() {
+  document.querySelectorAll('#page-hub table.assess-table tbody tr[data-rel]').forEach(tr => {
+    const badge = tr.querySelector('.badge');
+    const btn = tr.querySelector('button');
+    if (!badge || !btn) return;
+    const key = btn.id.replace('btn-', '');
+    if (badge.classList.contains('bdg-done')) {
+      btn.textContent = 'Cek';
+      btn.className = 'btn btn-outline btn-sm';
+      btn.setAttribute('onclick', `openForm('${key}', true)`);
+    } else {
+      tr.classList.add('qs-row-muted');
+      btn.disabled = true;
+    }
+  });
 }
 function markRowDone(key) {
   const badge = document.getElementById('bdg-' + key);
@@ -401,9 +433,9 @@ function updateQuota() {
   badges.forEach(b => { if (b.classList.contains('bdg-done')) done++; });
   document.getElementById('quota-rekan-title').textContent = `${done} Umpan Balik Sudah Diberikan`;
 }
-function openForm(key) {
+function openForm(key, readonly) {
   const s = subjects[key];
-  currentKey = key;
+  currentKey = readonly ? null : key;
   answered = {};
   document.getElementById('form-name').textContent = s.name;
   document.getElementById('form-subtitle').textContent = `${s.jabatan} · ${s.school}`;
@@ -415,11 +447,13 @@ function openForm(key) {
       <td class="c-disabled" style="font-size:0.8125rem">${row.no}.</td>
       <td style="font-weight:700;font-size:0.875rem">${row.aspek}</td>
       <td style="font-size:0.875rem;line-height:1.55;color:#2f3031">${row.deskripsi}</td>
-      <td><div class="pk-select-label"><select class="pk-select" aria-label="Umpan Balik untuk ${row.aspek}" onchange="selLikert(${row.no}, this.value)"><option value="" disabled selected>Pilih Umpan Balik</option>${likertOpts.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}</select><span class="pk-select-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 10L12 15L17 10H7Z" fill="#45474A"/></svg></span></div></td>`;
+      <td><div class="pk-select-label"><select class="pk-select" aria-label="Umpan Balik untuk ${row.aspek}" onchange="selLikert(${row.no}, this.value)" ${readonly ? 'disabled' : ''}><option value="" disabled selected>Pilih Umpan Balik</option>${likertOpts.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}</select><span class="pk-select-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 10L12 15L17 10H7Z" fill="#45474A"/></svg></span></div></td>`;
     tbody.appendChild(tr);
   });
   document.getElementById('btn-submit').disabled = true;
   document.getElementById('warn-msg').style.display = 'none';
+  document.getElementById('form-readonly-notice').style.display = readonly ? 'flex' : 'none';
+  document.getElementById('btn-submit').style.display = readonly ? 'none' : '';
   goTo('page-form');
 }
 function selLikert(n, key) {
@@ -428,6 +462,7 @@ function selLikert(n, key) {
   document.getElementById('btn-submit').disabled = !complete;
 }
 function trySubmit() {
+  if (!currentKey) return;
   if (Object.keys(answered).length < perilakuData.length) { document.getElementById('warn-msg').style.display = 'inline-flex'; return; }
   submitted.add(currentKey);
   markRowDone(currentKey);

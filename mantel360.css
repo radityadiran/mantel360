@@ -172,6 +172,10 @@ table.assess-table tr:hover td{background:#fafafa}
 .badge{display:inline-flex;align-items:center;gap:4px;font-size:0.8125rem;font-weight:600;padding:4px 12px;border-radius:999px;white-space:nowrap}
 .bdg-pending{background:#ffedce;color:#2f3031}
 .bdg-done{background:var(--badge-success-bg);color:#1b5e20}
+table.assess-table tr.qs-row-muted td{color:var(--text-disabled)}
+table.assess-table tr.qs-row-muted .person-name{color:var(--text-disabled)}
+table.assess-table tr.qs-row-muted .badge{background:var(--gray-10);color:var(--text-disabled)}
+table.assess-table tr.qs-row-muted .btn:disabled{background:var(--gray-10);color:var(--text-disabled);border-color:var(--gray-10);cursor:not-allowed}
 
 /* subject header (blue identity card) — merged with form table */
 .identity-form-wrap{border-radius:8px;overflow:hidden;box-shadow:0px 1px 1px rgba(0,0,0,.08),0px 2px 1px -1px rgba(0,0,0,.02),0px 1px 3px rgba(0,0,0,.1);margin-top:24px;margin-bottom:20px}
